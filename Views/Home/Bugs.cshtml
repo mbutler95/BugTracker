@@ -1,19 +1,50 @@
-﻿@{
+﻿@model DataModel
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div style="width: 40%; float:left; padding-right:10px">
-   Bugs
-   <div class="listview" style="height:auto; min-height:100px; overflow-y:scroll">
-      
-   </div>
-</div>
-
-<div style="width: 60%; float:right">
-   Information
-</div>
-
-<h1 class="display-4">Welcome</h1>
-<p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Bug Id
+            </th>
+            <th>
+                Title
+            </th>
+            <th>
+                Opened Date
+            </th>
+            <th>
+                UserId
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Bugs!)
+        {
+                <tr>
+                    <td>
+                    @Html.DisplayFor(modelItem => item.BugId)
+                    </td>
+                    <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                    </td>
+                    <td>
+                    @Html.DisplayFor(modelItem => item.OpenedDate)
+                    </td>
+                    <td>
+                    @Html.DisplayFor(modelItem => item.UserId)
+                    </td>
+                    <td>
+                        <a asp-controller="Bug" asp-action="Edit" asp-route-id="@item._id">Edit</a> |
+                        <a asp-action="Bug/Details" asp-route-id="@item._id">Details</a> |
+                        <a asp-action="Bug/Close" asp-route-id="@item._id">Close</a>
+                    </td>
+                </tr>
+        }
+    </tbody>
+</table>
 
 
