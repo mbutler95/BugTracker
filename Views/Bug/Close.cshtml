@@ -1,14 +1,13 @@
 ﻿@model BugTracker.Models.BugModel
 
 @{
-    ViewData["Title"] = "Close";
+    ViewData["Title"] = "Close Bug";
 }
 
 <h1>Close</h1>
 
-<h3>Are you sure you want to close this?</h3>
+<h3>Are you sure you want to close this Bug?</h3>
 <div>
-    <h4>Bug</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -45,6 +44,6 @@
     
     <form asp-action="Close">
         <input type="submit" value="Close" class="btn btn-danger" /> |
-        <a asp-controller="Home" asp-action="Bugs">Back to List</a>
+        <a asp-controller="Home" asp-action="Bugs">Back to Bug List</a>
     </form>
 </div>

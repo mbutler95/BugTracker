@@ -61,21 +61,22 @@ namespace BugTracker.Data
             return dbConn.GetCollection<UserModel>("Users").AsQueryable().Where(b => b.Archived == false).ToList();
         }
 
-        public void InsertUser(UserModel user)
+        public static UserModel GetUser(string ID)
+        {
+            var dbConn = GetMongoDbConnection();
+            return dbConn.GetCollection<UserModel>("Users").Find(doc => doc._id == ID).FirstOrDefault();
+        }
+
+        public static void InsertUser(UserModel user)
         {
             var dbConn = GetMongoDbConnection();
             dbConn.GetCollection<UserModel>("Users").InsertOne(user);
         }
-        public void UpdateUser(UserModel user)
+        public static void UpdateUser(UserModel user)
         {
             var dbConn = GetMongoDbConnection();
             dbConn.GetCollection<UserModel>("Users").ReplaceOne(doc => doc._id == user._id, user);
         }
-        public void DeleteUser(UserModel user)
-        {
-            var dbConn = GetMongoDbConnection();
-            dbConn.GetCollection<UserModel>("Users").DeleteOne(doc => doc._id == user._id);
-        }
-        
+                
     }
 }

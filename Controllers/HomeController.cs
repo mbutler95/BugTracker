@@ -27,10 +27,10 @@ namespace BugTracker.Controllers
             return View(bugs);
         }
 
-        public IActionResult Users(string name, int numTimes = 1)
+        public IActionResult Users()
         {
-            
-            return View();
+            List<UserModel> users = BLL.GetUsers();
+            return View(users);
         }
 
     }

@@ -13,7 +13,7 @@ namespace BugTracker.Data
             bugs = GetUserNames(bugs);
             return bugs;
         }
-        public static BugModel GetBugData(string _id)
+        public static BugModel GetBug(string _id)
         {
             var bug = DAL.GetBug(_id);
             bug.UserName = GetUserName(bug);
@@ -24,13 +24,13 @@ namespace BugTracker.Data
         public static string GetUserName(BugModel bug)
         {
             var users = DAL.GetUsers();
-            if (bug.UserId.Equals("0"))
+            if (users.Select(x => x.UserId.ToString()).Contains(bug.UserId))
             {
-                return "Unassigned";
+                return users.Where(x => x.UserId.ToString().Equals(bug.UserId)).Select(x => x.Name).FirstOrDefault();
             }
             else
             {
-                return users.Where(x => x.UserId.ToString().Equals(bug.UserId)).Select(x => x.Name).FirstOrDefault();
+                return "Unassigned";
             }
         }
         public static List<BugModel> GetUserNames(List<BugModel> bugs)
@@ -38,13 +38,13 @@ namespace BugTracker.Data
             var users = DAL.GetUsers();
             foreach(var bug in bugs)
             {
-                if(bug.UserId.Equals("0"))
+                if(users.Select(x => x.UserId.ToString()).Contains(bug.UserId))
                 {
-                    bug.UserName = "Unassigned";
+                    bug.UserName = users.Where(x => x.UserId.ToString().Equals(bug.UserId)).Select(x => x.Name).FirstOrDefault();
                 }
                 else 
                 {
-                    bug.UserName = users.Where(x => x.UserId.ToString().Equals(bug.UserId)).Select(x => x.Name).FirstOrDefault(); 
+                    bug.UserName = "Unassigned"; 
                 }
                 
             }
@@ -90,12 +90,57 @@ namespace BugTracker.Data
         public static int GetMaxBugID()
         {
             var bugs = DAL.GetAllBugs();
-            return bugs.Max(x => x.BugId);
+            if (bugs.Count() > 0)
+            {
+                return bugs.Max(x => x.BugId);
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        public static List<UserModel> GetUsers()
+        {
+            return DAL.GetUsers();
+        }
+
+        public static UserModel  GetUser(string _id)
+        {
+            var user = DAL.GetUser(_id);
+            return user;
+        }
+
+        public static void CreateUser(UserModel user)
+        {
+            user.UserId = GetMaxUserID() + 1;
+            user.CreatedDate = DateTime.Now;
+            DAL.InsertUser(user);
+        }
+
+        public static void UpdateUser(UserModel user)
+        {
+            DAL.UpdateUser(user);
+        }
+
+        public static void ArchiveUser(string _id)
+        {
+            var user = DAL.GetUser(_id);
+            user.Archived = true;
+            DAL.UpdateUser(user);
         }
         public static int GetMaxUserID()
         {
-            var bugs = DAL.GetUsers();
-            return bugs.Max(x => x.UserId);
+            var users = DAL.GetAllUsers();
+            if(users.Count() > 0)
+            {
+                return users.Max(x => x.UserId);
+            }
+            else
+            {
+                return 0;
+            }
+            
         }
     }
 }

@@ -17,7 +17,7 @@ namespace BugTracker.Controllers
         [Route("Bug/Details/{_id}")]
         public async Task<IActionResult> Details(string _id)
         {
-            var bug = BLL.GetBugData(_id);
+            var bug = BLL.GetBug(_id);
             return View(bug);
         }
 
@@ -49,7 +49,7 @@ namespace BugTracker.Controllers
         [Route("Bug/Edit/{_id}")]
         public async Task<IActionResult> Edit(string _id)
         {
-            var bug = BLL.GetBugData(_id);
+            var bug = BLL.GetBug(_id);
             return View(bug);
         }
 
@@ -72,7 +72,7 @@ namespace BugTracker.Controllers
         [Route("Bug/Close/{_id}")]
         public async Task<IActionResult> Close(string _id)
         {
-            var bug = BLL.GetBugData(_id);
+            var bug = BLL.GetBug(_id);
             return View(bug);
         }
 
