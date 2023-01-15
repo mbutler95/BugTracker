@@ -9,8 +9,12 @@ namespace BugTracker.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string? _id { get; set; }
 
+        public int UserId { get; set; }
+
         public string Name { get; set; } = null!;
 
         public DateTime CreatedDate { get; set; }
+
+        public bool Archived { get; set; }
     }
 }

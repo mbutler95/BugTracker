@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace BugTracker.Models
@@ -17,8 +18,10 @@ namespace BugTracker.Models
 
         public DateTime OpenedDate { get; set; }
 
-        public int UserId { get; set; }
+        public string? UserId { get; set; }
 
         public bool Archived { get; set; } = false;
+
+        public List<SelectListItem>? UserNameSelectList { get; set; }
     }
 }

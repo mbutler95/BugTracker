@@ -12,12 +12,18 @@ namespace BugTracker.Controllers
         [Route("Bug/Edit/{_id}")]
         public async Task<IActionResult> Edit(string _id)
         {
-            var data = new DataModel();
-            data.Bugs = new List<BugModel>() { DAL.GetBug(_id) };
-            data.Users = DAL.GetUsers();
-            data.UserNameSelectList = BLL.GetUserNameIds(data.Users);
-            return View(data);
+            var bug = BLL.GetBugData(_id);
+            return View(bug);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("Bug/Edit/{_id}")]
+        public async Task<IActionResult> Edit(string _id, [Bind("_id, BugId, Title, Description, OpenedDate, UserId, Archived")] BugModel bug)
+        {
+            var check = ModelState.IsValid;
+
+            return RedirectToAction("Bugs", "Home");
+        }
     }
 }
