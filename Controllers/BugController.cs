@@ -11,13 +11,16 @@ using System.Web;
 
 namespace BugTracker.Controllers
 {
+
     public class BugController : Controller
     {
+
         [HttpGet]
         [Route("Bug/Details/{_id}")]
         public async Task<IActionResult> Details(string _id)
         {
-            var bug = BLL.GetBug(_id);
+            var bll = new BugTrackerBLL().BLLProvider;
+            var bug = bll.GetBug(_id);
             return View(bug);
         }
 
@@ -25,8 +28,9 @@ namespace BugTracker.Controllers
         [Route("Bug/Create")]
         public async Task<IActionResult> Create()
         {
+            var bll = new BugTrackerBLL().BLLProvider;
             var bug = new BugModel();
-            bug.UserNameSelectList = BLL.GetUserNameSelectList(bug);
+            bug.UserNameSelectList = bll.GetUserNameSelectList(bug);
             return View(bug);
         }
 
@@ -35,21 +39,33 @@ namespace BugTracker.Controllers
         [Route("Bug/Create")]
         public async Task<IActionResult> Create([Bind("Title, Description, UserId")] BugModel bug)
         {
+            var bll = new BugTrackerBLL().BLLProvider;
             if (ModelState.IsValid)
             {
-                BLL.CreateBug(bug);
+                bll.CreateBug(bug);
                 return RedirectToAction("Bugs", "Home");
             }
 
-            bug.UserNameSelectList = BLL.GetUserNameSelectList(bug);
+            bug.UserNameSelectList = bll.GetUserNameSelectList(bug);
             return View(bug);
+        }
+
+        
+        [Route("Bug/Create/{title}/{description}")]
+        public void Create(string title, string description)
+        {
+            var bug = new BugModel(title, description);
+            var bll = new BugTrackerBLL().BLLProvider;
+            bll.CreateBug(bug);
+            RedirectToAction("Bugs", "Home");
         }
 
         [HttpGet]
         [Route("Bug/Edit/{_id}")]
         public async Task<IActionResult> Edit(string _id)
         {
-            var bug = BLL.GetBug(_id);
+            var bll = new BugTrackerBLL().BLLProvider;
+            var bug = bll.GetBug(_id);
             return View(bug);
         }
 
@@ -58,13 +74,14 @@ namespace BugTracker.Controllers
         [Route("Bug/Edit/{_id}")]
         public async Task<IActionResult> Edit(string _id, [Bind("_id, BugId, Title, Description, OpenedDate, UserId, Archived")] BugModel bug)
         {
+            var bll = new BugTrackerBLL().BLLProvider;
             if (ModelState.IsValid)
             {
-                BLL.UpdateBug(bug);
+                bll.UpdateBug(bug);
                 return RedirectToAction("Bugs", "Home");
             }
 
-            bug.UserNameSelectList = BLL.GetUserNameSelectList(bug);
+            bug.UserNameSelectList = bll.GetUserNameSelectList(bug);
             return View(bug);           
         }
 
@@ -72,7 +89,8 @@ namespace BugTracker.Controllers
         [Route("Bug/Close/{_id}")]
         public async Task<IActionResult> Close(string _id)
         {
-            var bug = BLL.GetBug(_id);
+            var bll = new BugTrackerBLL().BLLProvider;
+            var bug = bll.GetBug(_id);
             return View(bug);
         }
 
@@ -81,7 +99,8 @@ namespace BugTracker.Controllers
         [Route("Bug/Close/{_id}")]
         public async Task<IActionResult> Close_Post(string _id)
         {
-            BLL.CloseBug(_id);
+            var bll = new BugTrackerBLL().BLLProvider;
+            bll.CloseBug(_id);
             return RedirectToAction("Bugs", "Home");
         }
 

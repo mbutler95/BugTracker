@@ -23,13 +23,15 @@ namespace BugTracker.Controllers
 
         public IActionResult Bugs()
         {
-            List<BugModel> bugs = BLL.GetOpenBugs();
+            BugTrackerBLL bll = new BugTrackerBLL().BLLProvider;
+            List<BugModel> bugs = bll.GetOpenBugs();
             return View(bugs);
         }
 
         public IActionResult Users()
         {
-            List<UserModel> users = BLL.GetUsers();
+            BugTrackerBLL bll = new BugTrackerBLL().BLLProvider;
+            List<UserModel> users = bll.GetUsers();
             return View(users);
         }
 

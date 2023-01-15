@@ -19,9 +19,10 @@ namespace BugTracker.Controllers
         [Route("User/Create")]
         public async Task<IActionResult> Create([Bind("Name")] UserModel user)
         {
+            BugTrackerBLL bll = new BugTrackerBLL().BLLProvider;
             if (ModelState.IsValid)
             {
-                BLL.CreateUser(user);
+                bll.CreateUser(user);
                 return RedirectToAction("Users", "Home");
             }
 
@@ -32,7 +33,8 @@ namespace BugTracker.Controllers
         [Route("User/Edit/{_id}")]
         public async Task<IActionResult> Edit(string _id)
         {
-            var bug = BLL.GetUser(_id);
+            BugTrackerBLL bll = new BugTrackerBLL().BLLProvider;
+            var bug = bll.GetUser(_id);
             return View(bug);
         }
 
@@ -41,9 +43,10 @@ namespace BugTracker.Controllers
         [Route("User/Edit/{_id}")]
         public async Task<IActionResult> Edit(string _id, [Bind("_id, Name, UserId, CreatedDate, Archived")] UserModel user)
         {
+            BugTrackerBLL bll = new BugTrackerBLL().BLLProvider;
             if (ModelState.IsValid)
             {
-                BLL.UpdateUser(user);
+                bll.UpdateUser(user);
                 return RedirectToAction("Users", "Home");
             }
 
@@ -54,7 +57,8 @@ namespace BugTracker.Controllers
         [Route("User/Delete/{_id}")]
         public async Task<IActionResult> Delete(string _id)
         {
-            var user = BLL.GetUser(_id);
+            BugTrackerBLL bll = new BugTrackerBLL().BLLProvider;
+            var user = bll.GetUser(_id);
             return View(user);
         }
 
@@ -63,7 +67,8 @@ namespace BugTracker.Controllers
         [Route("User/Delete/{_id}")]
         public async Task<IActionResult> Delete_Post(string _id)
         {
-            BLL.ArchiveUser(_id);
+            BugTrackerBLL bll = new BugTrackerBLL().BLLProvider;
+            bll.ArchiveUser(_id);
             return RedirectToAction("Users", "Home");
         }
     }

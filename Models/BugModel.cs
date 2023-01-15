@@ -7,6 +7,14 @@ namespace BugTracker.Models
 {
     public class BugModel
     {
+        public BugModel() { }            
+        
+        public BugModel(string title, string description) 
+        {
+            Title = title;
+            Description = description;
+        }
+        
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string? _id { get; set; }
@@ -27,6 +35,6 @@ namespace BugTracker.Models
 
         public string? UserName { get; set; }
 
-        public List<SelectListItem>? UserNameSelectList { get; set; }
+        public List<SelectListItem>? UserNameSelectList { get; set; }        
     }
 }
