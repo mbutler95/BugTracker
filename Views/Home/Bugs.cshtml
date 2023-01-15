@@ -1,4 +1,4 @@
-﻿@model DataModel
+﻿@model List<BugModel>
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -16,13 +16,13 @@
                 Opened Date
             </th>
             <th>
-                UserId
+                Assigned User
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.Bugs!)
+        @foreach (var item in Model!)
         {
                 <tr>
                     <td>
@@ -35,12 +35,12 @@
                     @Html.DisplayFor(modelItem => item.OpenedDate)
                     </td>
                     <td>
-                    @Html.DisplayFor(modelItem => item.UserId)
+                    @Html.DisplayFor(modelItem => item.UserName)
                     </td>
                     <td>
                         <a asp-controller="Bug" asp-action="Edit" asp-route-id="@item._id">Edit</a> |
-                        <a asp-action="Bug/Details" asp-route-id="@item._id">Details</a> |
-                        <a asp-action="Bug/Close" asp-route-id="@item._id">Close</a>
+                        <a asp-controller="Bug" asp-action="Details" asp-route-id="@item._id">Details</a> |
+                        <a asp-controller="Bug"asp-action="Close" asp-route-id="@item._id">Close</a>
                     </td>
                 </tr>
         }

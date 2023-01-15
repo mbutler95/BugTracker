@@ -9,27 +9,27 @@
 <h4>Bug</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="BugId" class="control-label">Bug ID</label>
-                <input asp-for="BugId" class="form-control" />
+                <input asp-for="BugId" class="form-control" readonly="readonly" />
                 <span asp-validation-for="BugId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
+                <textarea asp-for="Title" class="form-control"></textarea>
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
+                <textarea asp-for="Description" class="form-control"></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="OpenedDate" class="control-label">Opened Date</label>
-                <input asp-for="OpenedDate" class="form-control" />
+                <input asp-for="OpenedDate" class="form-control" readonly="readonly"/>
                 <span asp-validation-for="OpenedDate" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -37,14 +37,16 @@
                 <select asp-for="UserId" class="form-control" asp-items="Model.UserNameSelectList"></select> 
                 <span asp-validation-for="UserId" class="text-danger"></span>
             </div>
+            <br />
             <div class="form-group" >
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
-
+<hr />
 <div>
     <a asp-controller="Home" asp-action="Bugs">Back to List</a>
 </div>
+
 

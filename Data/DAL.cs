@@ -18,7 +18,7 @@ namespace BugTracker.Data
             return client.GetDatabase("BugTracker");
         }
 
-        public static List<BugModel> GetBugs()
+        public static List<BugModel> GetOpenBugs()
         {
             var dbConn = GetMongoDbConnection();
             return dbConn.GetCollection<BugModel>("Bugs").AsQueryable().Where(b => b.Archived == false).ToList();
@@ -37,7 +37,7 @@ namespace BugTracker.Data
             dbConn.GetCollection<BugModel>("Bugs").InsertOne(bug);
         }
 
-        public void UpdateBug(BugModel bug)
+        public static void UpdateBug(BugModel bug)
         {
             var dbConn = GetMongoDbConnection();
             dbConn.GetCollection<BugModel>("Bugs").ReplaceOne(doc => doc._id == bug._id, bug);

@@ -23,10 +23,8 @@ namespace BugTracker.Controllers
 
         public IActionResult Bugs()
         {
-            DataModel data = new DataModel();
-            data.Bugs = DAL.GetBugs();
-            data.Users = DAL.GetUsers();
-            return View(data);
+            List<BugModel> bugs = BLL.GetOpenBugs();
+            return View(bugs);
         }
 
         public IActionResult Users(string name, int numTimes = 1)
