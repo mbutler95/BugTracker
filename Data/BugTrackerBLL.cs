@@ -1,14 +1,13 @@
 ﻿using BugTracker.Data;
 using BugTracker.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using MongoDB.Bson.Serialization.IdGenerators;
 using System.Security.Cryptography;
 
 namespace BugTracker.Data
 {
     public class BugTrackerBLL : IBugTrackerBLL
     {
-        private BugTrackerBLL _BLLProvider = null;
+        private BugTrackerBLL? _BLLProvider = null;
         public BugTrackerBLL BLLProvider
         {
             get

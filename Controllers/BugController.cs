@@ -57,7 +57,6 @@ namespace BugTracker.Controllers
             var bug = new BugModel(title, description);
             var bll = new BugTrackerBLL().BLLProvider;
             bll.CreateBug(bug);
-            RedirectToAction("Bugs", "Home");
         }
 
         [HttpGet]

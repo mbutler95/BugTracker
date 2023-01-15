@@ -6,7 +6,7 @@ namespace BugTracker.Data
     {
         private MongoClient? client;
 
-        private BugTrackerDAL _DALProvider = null;
+        private BugTrackerDAL? _DALProvider = null;
         public BugTrackerDAL DALProvider
         {
             get
