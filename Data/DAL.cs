@@ -18,6 +18,12 @@ namespace BugTracker.Data
             return client.GetDatabase("BugTracker");
         }
 
+        public static List<BugModel> GetAllBugs()
+        {
+            var dbConn = GetMongoDbConnection();
+            return dbConn.GetCollection<BugModel>("Bugs").AsQueryable().ToList();
+        }
+
         public static List<BugModel> GetOpenBugs()
         {
             var dbConn = GetMongoDbConnection();
@@ -31,7 +37,7 @@ namespace BugTracker.Data
         }
 
 
-        public void InsertBug(BugModel bug)
+        public static void InsertBug(BugModel bug)
         {
             var dbConn = GetMongoDbConnection();
             dbConn.GetCollection<BugModel>("Bugs").InsertOne(bug);
@@ -41,20 +47,18 @@ namespace BugTracker.Data
         {
             var dbConn = GetMongoDbConnection();
             dbConn.GetCollection<BugModel>("Bugs").ReplaceOne(doc => doc._id == bug._id, bug);
-        }
-
-        public void DeleteBug(BugModel bug)
-        {
-            var dbConn = GetMongoDbConnection();
-            dbConn.GetCollection<BugModel>("Bugs").DeleteOne(doc => doc._id == bug._id);
-        }
-
+        }        
         
-        
-        public static List<UserModel> GetUsers()
+        public static List<UserModel> GetAllUsers()
         {
             var dbConn = GetMongoDbConnection();
             return dbConn.GetCollection<UserModel>("Users").AsQueryable().ToList();
+        }
+
+        public static List<UserModel> GetUsers()
+        {
+            var dbConn = GetMongoDbConnection();
+            return dbConn.GetCollection<UserModel>("Users").AsQueryable().Where(b => b.Archived == false).ToList();
         }
 
         public void InsertUser(UserModel user)
@@ -72,5 +76,6 @@ namespace BugTracker.Data
             var dbConn = GetMongoDbConnection();
             dbConn.GetCollection<UserModel>("Users").DeleteOne(doc => doc._id == user._id);
         }
+        
     }
 }

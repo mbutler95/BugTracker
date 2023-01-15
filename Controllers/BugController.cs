@@ -22,6 +22,30 @@ namespace BugTracker.Controllers
         }
 
         [HttpGet]
+        [Route("Bug/Create")]
+        public async Task<IActionResult> Create()
+        {
+            var bug = new BugModel();
+            bug.UserNameSelectList = BLL.GetUserNameSelectList(bug);
+            return View(bug);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("Bug/Create")]
+        public async Task<IActionResult> Create([Bind("Title, Description, UserId")] BugModel bug)
+        {
+            if (ModelState.IsValid)
+            {
+                BLL.CreateBug(bug);
+                return RedirectToAction("Bugs", "Home");
+            }
+
+            bug.UserNameSelectList = BLL.GetUserNameSelectList(bug);
+            return View(bug);
+        }
+
+        [HttpGet]
         [Route("Bug/Edit/{_id}")]
         public async Task<IActionResult> Edit(string _id)
         {
@@ -41,8 +65,24 @@ namespace BugTracker.Controllers
             }
 
             bug.UserNameSelectList = BLL.GetUserNameSelectList(bug);
+            return View(bug);           
+        }
+
+        [HttpGet]
+        [Route("Bug/Close/{_id}")]
+        public async Task<IActionResult> Close(string _id)
+        {
+            var bug = BLL.GetBugData(_id);
             return View(bug);
-            
+        }
+
+        [HttpPost]
+        [ActionName("Close")]
+        [Route("Bug/Close/{_id}")]
+        public async Task<IActionResult> Close_Post(string _id)
+        {
+            BLL.CloseBug(_id);
+            return RedirectToAction("Bugs", "Home");
         }
 
     }

@@ -1,9 +1,22 @@
 ﻿@model List<BugModel>
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Bugs";
 }
 
-<table class="table">
+<h1>Bugs Index</h1>
+<hr />
+<p>
+    <a asp-controller="Bug" asp-action="Create" class="form-control" style="width:150px; text-decoration: none">Create New</a>
+</p>
+
+<table class="table" style="table-layout: fixed; width:100%">
+    <colgroup>
+       <col span="1" style="width: 10%;">
+       <col span="1" style="width: 35%;">
+       <col span="1" style="width: 15%;">
+       <col span="1" style="width: 15%;">
+       <col span="1" style="width: 15%;">
+    </colgroup>
     <thead>
         <tr>
             <th>
@@ -28,7 +41,7 @@
                     <td>
                     @Html.DisplayFor(modelItem => item.BugId)
                     </td>
-                    <td>
+                    <td style="word-wrap:break-word">
                     @Html.DisplayFor(modelItem => item.Title)
                     </td>
                     <td>
@@ -37,10 +50,10 @@
                     <td>
                     @Html.DisplayFor(modelItem => item.UserName)
                     </td>
-                    <td>
-                        <a asp-controller="Bug" asp-action="Edit" asp-route-id="@item._id">Edit</a> |
-                        <a asp-controller="Bug" asp-action="Details" asp-route-id="@item._id">Details</a> |
-                        <a asp-controller="Bug"asp-action="Close" asp-route-id="@item._id">Close</a>
+                    <td>                        
+                        <a asp-controller="Bug" asp-action="Edit" asp-route-id="@item._id">Edit</a>
+                        <a asp-controller="Bug" asp-action="Details" asp-route-id="@item._id">Details</a>
+                        <a asp-controller="Bug" asp-action="Close" asp-route-id="@item._id">Close</a>
                     </td>
                 </tr>
         }

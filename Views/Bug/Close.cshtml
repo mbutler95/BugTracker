@@ -1,11 +1,12 @@
 ﻿@model BugTracker.Models.BugModel
 
 @{
-    ViewData["Title"] = "Bug Details";
+    ViewData["Title"] = "Close";
 }
 
-<h1>Details</h1>
+<h1>Close</h1>
 
+<h3>Are you sure you want to close this?</h3>
 <div>
     <h4>Bug</h4>
     <hr />
@@ -41,9 +42,9 @@
             @Html.DisplayFor(model => model.UserName)
         </dd> 
     </dl>
-</div>
-<hr />
-<div>
-    <a asp-controller="Bug" asp-action="Edit" asp-route-id="@Model._id">Edit</a> |
-    <a asp-controller="Home" asp-action="Bugs">Back to Bug List</a>
+    
+    <form asp-action="Close">
+        <input type="submit" value="Close" class="btn btn-danger" /> |
+        <a asp-controller="Home" asp-action="Bugs">Back to List</a>
+    </form>
 </div>
