@@ -7,6 +7,8 @@ The application is setup with a Model-View-Controller framework, with Business L
 
 There is an exposed API which should allow you to add a bug to the system with the url, accessible at "Bug/Create/{Title}/{Description}".
 
+One design choice I made was to not delete bugs/users instead to archive them, this allows the application to keep track of unique IDs for the users/bugs alongside the MongoDB required ObjectId.
+
 To Run: Should hopefully be as simple as opening the solution in Visual Studio and starting it.
 
 To Test: For the Next week from 16-01-23, the database should allow network from anywhere. If there is a problem with this or access needs allowing/extending please email me at matthew.butler97@gmail.com.
