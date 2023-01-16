@@ -6,18 +6,6 @@ namespace BugTracker.Data
     {
         private MongoClient? client;
 
-        private BugTrackerDAL? _DALProvider = null;
-        public BugTrackerDAL DALProvider
-        {
-            get
-            {
-                if (_DALProvider == null)
-                    _DALProvider = new BugTrackerDAL();
-
-                return _DALProvider;
-            }
-        }
-
         public IMongoDatabase GetMongoDbConnection()
         {
             if (client == null)

@@ -5,7 +5,7 @@ namespace BugTracker.Data
 {
     public interface IBugTrackerBLL
     {
-        BugTrackerBLL BLLProvider { get; }
+        IBugTrackerDAL DALProvider { get; }
 
         void ArchiveUser(string _id);
         void CloseBug(string _id);

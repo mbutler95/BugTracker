@@ -16,21 +16,16 @@ namespace BugTracker.Controllers
             _logger = logger;
         }
 
-        public IActionResult Home()
-        {
-            return View();
-        }
-
         public IActionResult Bugs()
         {
-            BugTrackerBLL bll = new BugTrackerBLL().BLLProvider;
+            var bll = BugTrackerBLL.Instance();
             List<BugModel> bugs = bll.GetOpenBugs();
             return View(bugs);
         }
 
         public IActionResult Users()
         {
-            BugTrackerBLL bll = new BugTrackerBLL().BLLProvider;
+            var bll = BugTrackerBLL.Instance();
             List<UserModel> users = bll.GetUsers();
             return View(users);
         }

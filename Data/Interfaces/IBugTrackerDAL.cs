@@ -5,8 +5,6 @@ namespace BugTracker.Data
 {
     public interface IBugTrackerDAL
     {
-        BugTrackerDAL DALProvider { get; }
-
         List<BugModel> GetAllBugs();
         List<UserModel> GetAllUsers();
         BugModel GetBug(string ID);

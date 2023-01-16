@@ -7,28 +7,31 @@ namespace BugTracker.Data
 {
     public class BugTrackerBLL : IBugTrackerBLL
     {
-        private BugTrackerBLL? _BLLProvider = null;
-        public BugTrackerBLL BLLProvider
+        public static IBugTrackerBLL Instance()
+        {
+            return new BugTrackerBLL();
+        }
+
+        private IBugTrackerDAL? _DALProvider;
+        public IBugTrackerDAL DALProvider
         {
             get
             {
-                if (_BLLProvider == null)
-                    _BLLProvider = new BugTrackerBLL();
+                if (_DALProvider == null)
+                    _DALProvider = new BugTrackerDAL();
 
-                return _BLLProvider;
+                return _DALProvider;
             }
         }
         public List<BugModel> GetOpenBugs()
         {
-            var dal = new BugTrackerDAL().DALProvider;
-            var bugs = dal.GetOpenBugs();
+            var bugs = DALProvider.GetOpenBugs();
             bugs = GetUserNames(bugs);
             return bugs;
         }
         public BugModel GetBug(string _id)
         {
-            var dal = new BugTrackerDAL().DALProvider;
-            var bug = dal.GetBug(_id);
+            var bug = DALProvider.GetBug(_id);
             bug.UserName = GetUserName(bug);
             bug.UserNameSelectList = GetUserNameSelectList(bug);
             return bug;
@@ -36,8 +39,7 @@ namespace BugTracker.Data
 
         public string GetUserName(BugModel bug)
         {
-            var dal = new BugTrackerDAL().DALProvider;
-            var users = dal.GetUsers();
+            var users = DALProvider.GetUsers();
             if (users.Select(x => x.UserId.ToString()).Contains(bug.UserId))
             {
                 return users.Where(x => x.UserId.ToString().Equals(bug.UserId)).Select(x => x.Name).FirstOrDefault();
@@ -49,8 +51,7 @@ namespace BugTracker.Data
         }
         public List<BugModel> GetUserNames(List<BugModel> bugs)
         {
-            var dal = new BugTrackerDAL().DALProvider;
-            var users = dal.GetUsers();
+            var users = DALProvider.GetUsers();
             foreach (var bug in bugs)
             {
                 if (users.Select(x => x.UserId.ToString()).Contains(bug.UserId))
@@ -67,8 +68,7 @@ namespace BugTracker.Data
         }
         public List<SelectListItem> GetUserNameSelectList(BugModel bug)
         {
-            var dal = new BugTrackerDAL().DALProvider;
-            var users = dal.GetUsers();
+            var users = DALProvider.GetUsers();
             List<SelectListItem> list = new List<SelectListItem>();
             list.Add(new SelectListItem { Text = "Unassigned", Value = "0", Selected = true });
             foreach (var user in users)
@@ -86,30 +86,26 @@ namespace BugTracker.Data
 
         public void CreateBug(BugModel bug)
         {
-            var dal = new BugTrackerDAL().DALProvider;
             bug.BugId = GetMaxBugID() + 1;
             bug.OpenedDate = DateTime.Now;
-            dal.InsertBug(bug);
+            DALProvider.InsertBug(bug);
         }
 
         public void UpdateBug(BugModel bug)
         {
-            var dal = new BugTrackerDAL().DALProvider;
-            dal.UpdateBug(bug);
+            DALProvider.UpdateBug(bug);
         }
 
         public void CloseBug(string _id)
         {
-            var dal = new BugTrackerDAL().DALProvider;
-            var bug = dal.GetBug(_id);
+            var bug = DALProvider.GetBug(_id);
             bug.Archived = true;
-            dal.UpdateBug(bug);
+            DALProvider.UpdateBug(bug);
         }
 
         public int GetMaxBugID()
         {
-            var dal = new BugTrackerDAL().DALProvider;
-            var bugs = dal.GetAllBugs();
+            var bugs = DALProvider.GetAllBugs();
             if (bugs.Count() > 0)
             {
                 return bugs.Max(x => x.BugId);
@@ -122,41 +118,35 @@ namespace BugTracker.Data
 
         public List<UserModel> GetUsers()
         {
-            var dal = new BugTrackerDAL().DALProvider;
-            return dal.GetUsers();
+            return DALProvider.GetUsers();
         }
 
         public UserModel GetUser(string _id)
         {
-            var dal = new BugTrackerDAL().DALProvider;
-            return dal.GetUser(_id);
+            return DALProvider.GetUser(_id);
         }
 
         public void CreateUser(UserModel user)
         {
             user.UserId = GetMaxUserID() + 1;
             user.CreatedDate = DateTime.Now;
-            var dal = new BugTrackerDAL().DALProvider;
-            dal.InsertUser(user);
+            DALProvider.InsertUser(user);
         }
 
         public void UpdateUser(UserModel user)
         {
-            var dal = new BugTrackerDAL().DALProvider;
-            dal.UpdateUser(user);
+            DALProvider.UpdateUser(user);
         }
 
         public void ArchiveUser(string _id)
         {
-            var dal = new BugTrackerDAL().DALProvider;
-            var user = dal.GetUser(_id);
+            var user = DALProvider.GetUser(_id);
             user.Archived = true;
-            dal.UpdateUser(user);
+            DALProvider.UpdateUser(user);
         }
         public int GetMaxUserID()
         {
-            var dal = new BugTrackerDAL().DALProvider;
-            var users = dal.GetAllUsers();
+            var users = DALProvider.GetAllUsers();
             if (users.Count() > 0)
             {
                 return users.Max(x => x.UserId);
