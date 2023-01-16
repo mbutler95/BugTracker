@@ -1,6 +1,7 @@
 ﻿using BugTracker.Data;
 using BugTracker.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using MongoDB.Driver;
 using System.Security.Cryptography;
 
 namespace BugTracker.Data
@@ -25,21 +26,23 @@ namespace BugTracker.Data
         }
         public List<BugModel> GetOpenBugs()
         {
-            var bugs = DALProvider.GetOpenBugs();
-            bugs = GetUserNames(bugs);
+            var client = DALProvider.GetMongoDbClient();
+            var bugs = DALProvider.GetOpenBugs(client);
+            bugs = GetUserNames(client, bugs);
             return bugs;
         }
         public BugModel GetBug(string _id)
         {
-            var bug = DALProvider.GetBug(_id);
-            bug.UserName = GetUserName(bug);
-            bug.UserNameSelectList = GetUserNameSelectList(bug);
+            var client = DALProvider.GetMongoDbClient();
+            var bug = DALProvider.GetBug(client, _id);
+            bug.UserName = GetUserName(client, bug);
+            bug.UserNameSelectList = GetUserNameSelectList(client, bug);
             return bug;
         }
 
-        public string GetUserName(BugModel bug)
+        public string GetUserName(IMongoClient client, BugModel bug)
         {
-            var users = DALProvider.GetUsers();
+            var users = DALProvider.GetUsers(client);
             if (users.Select(x => x.UserId.ToString()).Contains(bug.UserId))
             {
                 return users.Where(x => x.UserId.ToString().Equals(bug.UserId)).Select(x => x.Name).FirstOrDefault();
@@ -49,9 +52,9 @@ namespace BugTracker.Data
                 return "Unassigned";
             }
         }
-        public List<BugModel> GetUserNames(List<BugModel> bugs)
+        public List<BugModel> GetUserNames(IMongoClient client,  List<BugModel> bugs)
         {
-            var users = DALProvider.GetUsers();
+            var users = DALProvider.GetUsers(client);
             foreach (var bug in bugs)
             {
                 if (users.Select(x => x.UserId.ToString()).Contains(bug.UserId))
@@ -66,9 +69,16 @@ namespace BugTracker.Data
             }
             return bugs;
         }
+
         public List<SelectListItem> GetUserNameSelectList(BugModel bug)
         {
-            var users = DALProvider.GetUsers();
+            var client = DALProvider.GetMongoDbClient();
+            return GetUserNameSelectList(client, bug);
+        }
+
+        public List<SelectListItem> GetUserNameSelectList(IMongoClient client, BugModel bug)
+        {            
+            var users = DALProvider.GetUsers(client);
             List<SelectListItem> list = new List<SelectListItem>();
             list.Add(new SelectListItem { Text = "Unassigned", Value = "0", Selected = true });
             foreach (var user in users)
@@ -86,26 +96,29 @@ namespace BugTracker.Data
 
         public void CreateBug(BugModel bug)
         {
-            bug.BugId = GetMaxBugID() + 1;
+            var client = DALProvider.GetMongoDbClient();
+            bug.BugId = GetMaxBugID(client) + 1;
             bug.OpenedDate = DateTime.Now;
-            DALProvider.InsertBug(bug);
+            DALProvider.InsertBug(client, bug);
         }
 
         public void UpdateBug(BugModel bug)
         {
-            DALProvider.UpdateBug(bug);
+            var client = DALProvider.GetMongoDbClient();
+            DALProvider.UpdateBug(client, bug);
         }
 
         public void CloseBug(string _id)
         {
-            var bug = DALProvider.GetBug(_id);
+            var client = DALProvider.GetMongoDbClient();
+            var bug = DALProvider.GetBug(client, _id);
             bug.Archived = true;
-            DALProvider.UpdateBug(bug);
+            DALProvider.UpdateBug(client, bug);
         }
 
-        public int GetMaxBugID()
+        public int GetMaxBugID(IMongoClient client)
         {
-            var bugs = DALProvider.GetAllBugs();
+            var bugs = DALProvider.GetAllBugs(client);
             if (bugs.Count() > 0)
             {
                 return bugs.Max(x => x.BugId);
@@ -118,35 +131,45 @@ namespace BugTracker.Data
 
         public List<UserModel> GetUsers()
         {
-            return DALProvider.GetUsers();
+            var client = DALProvider.GetMongoDbClient();
+            return DALProvider.GetUsers(client);
         }
 
-        public UserModel GetUser(string _id)
+        public UserModel GetUser( string _id)
         {
-            return DALProvider.GetUser(_id);
+            var client = DALProvider.GetMongoDbClient();
+            return GetUser(client, _id);
+        }
+
+        public UserModel GetUser(IMongoClient client, string _id)
+        {
+            return DALProvider.GetUser(client, _id);
         }
 
         public void CreateUser(UserModel user)
         {
-            user.UserId = GetMaxUserID() + 1;
+            var client = DALProvider.GetMongoDbClient();
+            user.UserId = GetMaxUserID(client) + 1;
             user.CreatedDate = DateTime.Now;
-            DALProvider.InsertUser(user);
+            DALProvider.InsertUser(client, user);
         }
 
         public void UpdateUser(UserModel user)
         {
-            DALProvider.UpdateUser(user);
+            var client = DALProvider.GetMongoDbClient();
+            DALProvider.UpdateUser(client, user);
         }
 
         public void ArchiveUser(string _id)
         {
-            var user = DALProvider.GetUser(_id);
+            var client = DALProvider.GetMongoDbClient();
+            var user = DALProvider.GetUser(client, _id);
             user.Archived = true;
-            DALProvider.UpdateUser(user);
+            DALProvider.UpdateUser(client, user);
         }
-        public int GetMaxUserID()
+        public int GetMaxUserID(IMongoClient client)
         {
-            var users = DALProvider.GetAllUsers();
+            var users = DALProvider.GetAllUsers(client);
             if (users.Count() > 0)
             {
                 return users.Max(x => x.UserId);

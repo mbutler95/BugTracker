@@ -5,16 +5,16 @@ namespace BugTracker.Data
 {
     public interface IBugTrackerDAL
     {
-        List<BugModel> GetAllBugs();
-        List<UserModel> GetAllUsers();
-        BugModel GetBug(string ID);
-        IMongoDatabase GetMongoDbConnection();
-        List<BugModel> GetOpenBugs();
-        UserModel GetUser(string ID);
-        List<UserModel> GetUsers();
-        void InsertBug(BugModel bug);
-        void InsertUser(UserModel user);
-        void UpdateBug(BugModel bug);
-        void UpdateUser(UserModel user);
+        IMongoClient GetMongoDbClient();
+        List<BugModel> GetAllBugs(IMongoClient conn);
+        List<UserModel> GetAllUsers(IMongoClient conn);
+        BugModel GetBug(IMongoClient conn, string ID);       
+        List<BugModel> GetOpenBugs(IMongoClient conn);
+        UserModel GetUser(IMongoClient conn, string ID);
+        List<UserModel> GetUsers(IMongoClient conn);
+        void InsertBug(IMongoClient conn, BugModel bug);
+        void InsertUser(IMongoClient conn, UserModel user);
+        void UpdateBug(IMongoClient conn, BugModel bug);
+        void UpdateUser(IMongoClient conn, UserModel user);
     }
 }

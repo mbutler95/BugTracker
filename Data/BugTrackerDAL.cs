@@ -4,9 +4,9 @@ namespace BugTracker.Data
 {
     public class BugTrackerDAL : IBugTrackerDAL
     {
-        private MongoClient? client;
+        private IMongoClient? client;
 
-        public IMongoDatabase GetMongoDbConnection()
+        public IMongoClient GetMongoDbClient()
         {
             if (client == null)
             {
@@ -14,67 +14,57 @@ namespace BugTracker.Data
                 settings.ServerApi = new ServerApi(ServerApiVersion.V1);
                 client = new MongoClient(settings);
             }
-            return client.GetDatabase("BugTracker");
+            return client;
         }
 
-        public List<BugModel> GetAllBugs()
+        public List<BugModel> GetAllBugs(IMongoClient conn)
         {
-            var dbConn = GetMongoDbConnection();
-            return dbConn.GetCollection<BugModel>("Bugs").AsQueryable().ToList();
+            return conn.GetDatabase("BugTracker").GetCollection<BugModel>("Bugs").AsQueryable().ToList();
         }
 
-        public List<BugModel> GetOpenBugs()
+        public List<BugModel> GetOpenBugs(IMongoClient conn)
         {
-            var dbConn = GetMongoDbConnection();
-            return dbConn.GetCollection<BugModel>("Bugs").AsQueryable().Where(b => b.Archived == false).ToList();
+            return conn.GetDatabase("BugTracker").GetCollection<BugModel>("Bugs").AsQueryable().Where(b => b.Archived == false).ToList();
         }
 
-        public BugModel GetBug(string ID)
+        public BugModel GetBug(IMongoClient conn, string ID)
         {
-            var dbConn = GetMongoDbConnection();
-            return dbConn.GetCollection<BugModel>("Bugs").Find(doc => doc._id == ID).FirstOrDefault();
+            return conn.GetDatabase("BugTracker").GetCollection<BugModel>("Bugs").Find(doc => doc._id == ID).FirstOrDefault();
         }
 
 
-        public void InsertBug(BugModel bug)
+        public void InsertBug(IMongoClient conn, BugModel bug)
         {
-            var dbConn = GetMongoDbConnection();
-            dbConn.GetCollection<BugModel>("Bugs").InsertOne(bug);
+            conn.GetDatabase("BugTracker").GetCollection<BugModel>("Bugs").InsertOne(bug);
         }
 
-        public void UpdateBug(BugModel bug)
+        public void UpdateBug(IMongoClient conn, BugModel bug)
         {
-            var dbConn = GetMongoDbConnection();
-            dbConn.GetCollection<BugModel>("Bugs").ReplaceOne(doc => doc._id == bug._id, bug);
+            conn.GetDatabase("BugTracker").GetCollection<BugModel>("Bugs").ReplaceOne(doc => doc._id == bug._id, bug);
         }
 
-        public List<UserModel> GetAllUsers()
+        public List<UserModel> GetAllUsers(IMongoClient conn)
         {
-            var dbConn = GetMongoDbConnection();
-            return dbConn.GetCollection<UserModel>("Users").AsQueryable().ToList();
+           return conn.GetDatabase("BugTracker").GetCollection<UserModel>("Users").AsQueryable().ToList();
         }
 
-        public List<UserModel> GetUsers()
+        public List<UserModel> GetUsers(IMongoClient conn)
         {
-            var dbConn = GetMongoDbConnection();
-            return dbConn.GetCollection<UserModel>("Users").AsQueryable().Where(b => b.Archived == false).ToList();
+            return conn.GetDatabase("BugTracker").GetCollection<UserModel>("Users").AsQueryable().Where(b => b.Archived == false).ToList();
         }
 
-        public UserModel GetUser(string ID)
+        public UserModel GetUser(IMongoClient conn, string ID)
         {
-            var dbConn = GetMongoDbConnection();
-            return dbConn.GetCollection<UserModel>("Users").Find(doc => doc._id == ID).FirstOrDefault();
+            return conn.GetDatabase("BugTracker").GetCollection<UserModel>("Users").Find(doc => doc._id == ID).FirstOrDefault();
         }
 
-        public void InsertUser(UserModel user)
+        public void InsertUser(IMongoClient conn, UserModel user)
         {
-            var dbConn = GetMongoDbConnection();
-            dbConn.GetCollection<UserModel>("Users").InsertOne(user);
+            conn.GetDatabase("BugTracker").GetCollection<UserModel>("Users").InsertOne(user);
         }
-        public void UpdateUser(UserModel user)
+        public void UpdateUser(IMongoClient conn, UserModel user)
         {
-            var dbConn = GetMongoDbConnection();
-            dbConn.GetCollection<UserModel>("Users").ReplaceOne(doc => doc._id == user._id, user);
+            conn.GetDatabase("BugTracker").GetCollection<UserModel>("Users").ReplaceOne(doc => doc._id == user._id, user);
         }
 
     }
